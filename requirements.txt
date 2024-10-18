@@ -1,0 +1,5 @@
+Flask==2.3.2
+playwright==1.36.0
+Pillow==9.5.0
+boto3==1.26.158
+python-dotenv==1.0.0
