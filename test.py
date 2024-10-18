@@ -2,7 +2,7 @@ import requests
 import json
 
 # URL de la API
-url = "http://127.0.0.1:5000/generate"
+url = "https://imagetool.openwebinars.email/generate"
 
 input_html = """
 <html><head>

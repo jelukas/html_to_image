@@ -1,6 +1,7 @@
 import os
 import asyncio
 import uuid
+import base64
 from flask import Flask, request, jsonify
 from playwright.async_api import async_playwright
 from PIL import Image
@@ -69,6 +70,12 @@ def upload_to_s3(image, filename):
     s3_url = f"https://{S3_BUCKET}.s3.{S3_REGION}.amazonaws.com/{filename}"
     return s3_url
 
+def is_base64(s):
+    try:
+        return base64.b64encode(base64.b64decode(s)).decode() == s
+    except Exception:
+        return False
+
 @app.route('/generate', methods=['POST'])
 def generate_image():
     data = request.get_json()
@@ -76,6 +83,13 @@ def generate_image():
     
     if not html_content:
         return jsonify({'error': 'No se proporcionó contenido HTML.'}), 400
+    
+    # Verificar si el contenido es base64 y decodificarlo si es necesario
+    if is_base64(html_content):
+        try:
+            html_content = base64.b64decode(html_content).decode('utf-8')
+        except Exception as e:
+            return jsonify({'error': f'Error al decodificar el contenido base64: {str(e)}'}), 400
     
     viewport_width = data.get('width', 600)
     viewport_height = data.get('height', 237)
