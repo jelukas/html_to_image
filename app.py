@@ -100,7 +100,7 @@ def generate_image():
         image = asyncio.run(html_to_png(html_content, viewport_width, viewport_height))
         image_url = upload_to_s3(image, output_filename)
         
-        return jsonify({'image_url': image_url}), 200
+        return jsonify({'imageUrl': image_url}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
